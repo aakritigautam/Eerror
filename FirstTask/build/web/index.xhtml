@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <title>JSF Form</title>
+</h:head>
+    
+<body>
+    <h3>List students</h3>
+    <h:form rendered="#{not empty studentBean.list}">
+        <h:dataTable value="#{studentBean.list}" var="item">
+            <h:column><f:facet name="header">ID</f:facet>#{item.id}</h:column>
+            <h:column><f:facet name="header">First Name</f:facet>#{item.firstname}</h:column>
+            <h:column><f:facet name="header">Middle Name</f:facet>#{item.middlename}</h:column>
+            <h:column><f:facet name="header">Last Name</f:facet>#{item.lastname}</h:column>
+            <h:column><f:facet name="header">Faculty</f:facet>#{item.faculty}</h:column>
+            <h:column><f:facet name="header">Program</f:facet>#{item.program}</h:column>
+            <h:column>
+                <h:commandButton value="edit" action="#{studentBean.edit(item)}" />
+            </h:column>
+            <h:column>
+                <h:commandButton value="delete" action="#{studentBean.delete(item)}" />
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    
+    <h:panelGroup rendered="#{empty studentBean.list}">
+        <p>No students! Please add students.</p>
+    </h:panelGroup>
+    
+    <h:panelGroup rendered="#{!studentBean.edit}">
+        <h3>Add student</h3>
+        <h:form>
+            
+        
+            <h:outputLabel >First Name:</h:outputLabel>
+          <h:inputText id="firstname" value="#{studentBean.item.firstname}" required="true" requiredMessage="First name is required" /><br/>  
+            <h:outputLabel >Middle Name:</h:outputLabel>
+          <h:inputText id="middlename" value="#{studentBean.item.middlename}" required="false" /><br/>
+             <h:outputLabel >Last Name:</h:outputLabel>
+             <h:inputText id="lastname" required="true" value="#{studentBean.item.lastname}" requiredMessage="Last name is required" /><br/> 
+              <h:outputLabel >Faculty:</h:outputLabel>
+             <h:selectOneMenu id="faculty" required="true" requiredMessage="Faculty is required" value="#{studentBean.item.faculty}">
+                <f:selectItem itemValue="Management" itemLabel="Management"/>
+                <f:selectItem itemValue="Science and technology" itemLabel="Science and Technology"/>
+                <f:ajax render="program"/>
+            </h:selectOneMenu>
+            <br/>
+
+            <h:panelGroup id="program">
+                 <h:outputLabel >Program:</h:outputLabel>
+                 <h:selectOneMenu value="#{studentBean.item.program}" rendered="#{studentBean.item.faculty == 'Management'}" required="true" >
+                    <f:selectItem itemValue="BBA" itemLabel="BBA"/>
+                    <f:selectItem itemValue="BBS" itemLabel="BBS"/>
+                </h:selectOneMenu>
+                <h:selectOneMenu value="#{studentBean.item.program}" rendered="#{studentBean.item.faculty == 'Science and technology'}" required="true" >
+                    <f:selectItem itemValue="BE.Comp" itemLabel="BE.Comp"/>
+                    <f:selectItem itemValue="BCA" itemLabel="BCA"/>
+                </h:selectOneMenu>
+        </h:panelGroup>
+            <br/>
+            <p>
+                <h:commandButton value="add" action="#{studentBean.add}" />
+                <h:commandButton value="reset" action="#{studentBean.resetAdd}" />
+            </p>
+        </h:form>
+    </h:panelGroup>
+    
+    <h:panelGroup rendered="#{studentBean.edit}">
+        <h3>Edit student #{studentBean.item.id}</h3>
+        <h:form>
+            
+            <h:outputLabel >First Name:</h:outputLabel>
+          <h:inputText id="firstname" value="#{studentBean.item.firstname}" required="true" requiredMessage="First name is required" /><br/>  
+            <h:outputLabel >Middle Name:</h:outputLabel>
+          <h:inputText id="middlename" value="#{studentBean.item.middlename}" required="false" /><br/>
+             <h:outputLabel >Last Name:</h:outputLabel>
+             <h:inputText id="lastname" required="true" value="#{studentBean.item.lastname}" requiredMessage="Last name is required" /><br/> 
+              <h:outputLabel >Faculty:</h:outputLabel>
+             <h:selectOneMenu id="faculty" required="true" requiredMessage="Faculty is required" value="#{studentBean.item.faculty}">
+                <f:selectItem itemValue="Management" itemLabel="Management"/>
+                <f:selectItem itemValue="Science and technology" itemLabel="Science and Technology"/>
+                <f:ajax render="program"/>
+            </h:selectOneMenu>
+            <br/>
+
+            <h:panelGroup id="program">
+                 <h:outputLabel >Program:</h:outputLabel>
+                 <h:selectOneMenu value="#{studentBean.item.program}" rendered="#{studentBean.item.faculty == 'Management'}" required="true" >
+                    <f:selectItem itemValue="BBA" itemLabel="BBA"/>
+                    <f:selectItem itemValue="BBS" itemLabel="BBS"/>
+                </h:selectOneMenu>
+                <h:selectOneMenu value="#{studentBean.item.program}" rendered="#{studentBean.item.faculty == 'Science and technology'}" required="true" >
+                    <f:selectItem itemValue="BE.Comp" itemLabel="BE.Comp"/>
+                    <f:selectItem itemValue="BCA" itemLabel="BCA"/>
+                </h:selectOneMenu>
+        </h:panelGroup>
+            
+                <h:commandButton value="save" action="#{studentBean.saveEdit}" />
+                <h:commandButton value="cancel" action="#{studentBean.cancelEdit}" />
+            
+        </h:form>
+    </h:panelGroup>
+    
+</body>
+</html>
